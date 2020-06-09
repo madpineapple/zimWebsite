@@ -44,8 +44,8 @@ app.post('/api/form',(req,res)=>{
     //         return callback(new Error('Unknown user'));
     //     }else{
     //         return callback(null, accessToken);
-    //     }comment again
-    //
+    //     }
+    //comment
     // });
     smtpTransport.sendMail(mailOptions,(error,response)=>{
         if(error){
@@ -58,6 +58,19 @@ app.post('/api/form',(req,res)=>{
     smtpTransport.close();
 })
 
+//buid and deploy for heroku
+app.use(express.static(path.join(__dirname, 'client/build')));
 
+if(process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'client/build')));
+  //
+  app.get('*', (req, res) => {
+    res.sendfile(path.join(__dirname = 'client/build/index.html'));
+  })
+}
+//build mode
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/public/index.html'));
+})
 const port = 5000;
 app.listen(port, () => console.log(`Server started on Port ${port}`));
